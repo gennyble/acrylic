@@ -1,4 +1,4 @@
-use std::{fs::File, io::BufWriter};
+use std::{fs::File, io::BufWriter, time::Instant};
 
 use acrylic::{
     primitives::{Line, Rect},
@@ -12,8 +12,20 @@ fn main() {
         Rect::new((64, 64), (128, 128)),
         Rgba::new(0x11, 0x33, 0x55, 0xFF),
     );
+    can.draw(
+        Line::new((64, 64), (192, 192)),
+        Rgba::new(0x55, 0x33, 0x11, 0xFF),
+    );
 
-    write_png(can.into_image())
+    let img = can.into_image();
+    let before = Instant::now();
+    //let img = img.rotate(168.0);
+    println!(
+        "Rotate took {}ms",
+        Instant::now().duration_since(before).as_millis()
+    );
+
+    write_png(img)
 }
 
 fn write_png(image: Image<Rgba>) {
